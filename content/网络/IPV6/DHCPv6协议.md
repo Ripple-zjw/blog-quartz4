@@ -144,6 +144,72 @@ Client                     Server
 ---
 # 🧠 八、DHCPv6 Option
 
+## 报文结构
+
+所有 DHCPv6 选项都遵循统一格式：
+
+| 字段                | 长度（字节） | 含义                                      |
+| ----------------- | ------ | --------------------------------------- |
+| **Option Code**   | 2      | 标识是哪种选项（如 IA_NA、ServerID、Status Code 等） |
+| **Option Length** | 2      | 后续数据（Option Data）的长度（不含前4字节）            |
+| **Option Data**   | 可变     | 具体内容，例如地址、时间、子选项等                       |
+
+```
+0             1                 2                 3
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|         Option Code           |         Option Length         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                                                               |
+.                         Option Data                           .
+|                                                               |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+
+### Option 的嵌套结构（支持层级）
+DHCPv6 Option 支持 **嵌套（Nested Options）**，即一个选项内部再包含其他选项。
+例如
+```
+OPTION_IA_NA (Code 3)
+ ├─ IAID
+ ├─ T1
+ ├─ T2
+ ├─ OPTION_IAADDR (Code 5)
+ │   ├─ IPv6 Address
+ │   ├─ Preferred Lifetime
+ │   ├─ Valid Lifetime
+ │   └─ (可能还有子选项，例如 OPTION_STATUS_CODE)
+ └─ OPTION_STATUS_CODE (Code 13)
+```
+
+#### DHCPv6 option是如何解析出哪个是子option哪个是数据的？
+
+RFC 8415 定义的所有 DHCPv6 Option 都有统一的**TLV 格式**：
+**关键点：没有额外标志位来区分，完全靠 Option Code 来定义结构。**
+
+也就是说——
+> DHCPv6 协议的每一个 Option（通过 Option Code 区分）在 RFC 中都有自己固定的内部格式。  
+> 你必须根据 Option Code 的定义来解析 Option Data。
+
+举例：Option 3 —— IA_NA（Identity Association for Non-temporary Address）
+
+|字段|长度|说明|
+|---|---|---|
+|IAID|4|客户端分配的 IA ID|
+|T1|4|续租时间|
+|T2|4|重新绑定时间|
+|IA_NA-options|可变|这里开始是一系列嵌套的 **子 Option**|
+
+➡️ 注意这里最后一部分是“IA_NA-options”，它自己又是一组 TLV 格式的子 Option。  
+常见的子 Option 有：
+- **Option 5**（IA Address）
+- **Option 13**（Status Code）
+
+所以，当 DHCPv6 客户端或服务器解析到 Option Code = 3 时，它知道：
+- 前 12 字节是固定字段（IAID, T1, T2）
+- 剩下的部分是嵌套的 Option 列表
+
+总结: 每个option都由**固定长度**加可选部分组成，要根据**Opion Length**判断是否还有可选的子option。
+
 ## DHCPv6 常见选项一览表
 
 | 代码 (Option Code) | 名称 (Option Name)         | 类型 / 内容                                                    | 说明                                        | 常见在哪些报文中出现                        |

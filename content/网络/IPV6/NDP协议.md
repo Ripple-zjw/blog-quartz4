@@ -4,7 +4,7 @@ NDP（**Neighbor Discovery Protocol**，邻居发现协议）是 IPv6 网络中�
 它负责的功能相当于 IPv4 中 **ARP + ICMP Router Discovery + ICMP Redirect + 部分 DHCP 功能** 的综合体。
 
 ---
-# 🧩 一、NDP 是什么
+# 一、NDP 是什么
 
 **定义**：  
 NDP 是基于 **ICMPv6** 的一组消息协议，用于：
@@ -20,7 +20,7 @@ NDP 是基于 **ICMPv6** 的一组消息协议，用于：
 
 ---
 
-# 🧠 二、NDP 的核心思想
+# 二、NDP 的核心思想
 
 > 在 IPv6 中，**所有“邻居层面”的通信控制**都通过 ICMPv6 完成。  
 > 它用组播代替广播，用更智能的机制取代 ARP。
@@ -38,7 +38,7 @@ IPv6 的做法（全部走 ICMPv6）：
 - **Redirect**：路由器重定向主机使用更优路径
 
 ---
-# 📬 三、NDP 五种核心报文类型
+# 三、NDP 五种核心报文类型
 | 名称                              | ICMPv6 Type | 方向          | 功能                 |
 | ------------------------------- | ----------- | ----------- | ------------------ |
 | **Router Solicitation (RS)**    | 133         | 主机 → 路由器    | 主机请求网络参数（谁是网关？）    |
@@ -47,14 +47,16 @@ IPv6 的做法（全部走 ICMPv6）：
 | **Neighbor Advertisement (NA)** | 136         | 主机 ↔ 主机/路由器 | 响应 NS 或通告自身存在      |
 | **Redirect**                    | 137         | 路由器 → 主机    | 通知主机更优的下一跳地址       |
 
-## NS/NA应用场景
+## NS/NA
+
 | 场景                | 使用的报文   | 功能说明                  |
 | ----------------- | ------- | --------------------- |
 | **地址解析**          | NS → NA | 解析 IPv6 到 MAC（类似 ARP） |
 | **地址冲突检测 (DAD)**  | NS      | 检查自己要用的地址是否被占用        |
 | **邻居可达性检测 (NUD)** | NS ↔ NA | 定期检测邻居是否在线            |
 | **主动通告更新**        | NA      | 告诉别人我的 MAC 改变了        |
-## RS/RA应用场景
+## RS/RA
+
 | 场景                           | 使用的报文   | 功能说明                                             |
 | ---------------------------- | ------- | ------------------------------------------------ |
 | **路由器发现 (Router Discovery)** | RS → RA | 主机请求网络中可用的路由器，路由器回应自身信息（默认网关、前缀、MTU 等）           |
@@ -65,7 +67,8 @@ IPv6 的做法（全部走 ICMPv6）：
 | **网络状态维护（周期广播）**             | RA      | 路由器定期发送 RA 保持主机的配置信息最新，检测网络仍然可用                  |
 | **网络切换检测**                   | RS → RA | 主机检测到接口状态变化后发送 RS，请求立即获取新的网络参数                   |
 
-## Redirect 应用场景
+
+## Redirect 
 Redirect（Type 137）由路由器发给主机，告诉主机“对于某个目的地址/前缀，你应该把下一跳改为这个更优的目标（target）”，以便优化转发路径或修正错误的下一跳。
 ### 触发条件（路由器为什么会发送 Redirect）
 路由器**在转发来自主机的一个包**并且满足下列情形之一时，会向该主机发送 Redirect（RFC 4861 要求）：
@@ -83,7 +86,7 @@ Redirect（Type 137）由路由器发给主机，告诉主机“对于某个目�
 4. **更新路由/下一跳**：主机为受影响的目的（Destination Address）建立/修改一条更优的下一跳条目（将数据包发给 Target 而不是原来的下一跳）；这通常在本地路由缓存或本地路由表表示为到达该目的应走的新下一跳。
 5. **可选验证**：若 Redirected Header Option 存在，主机可用它与本地正在发送的数据包头比较，作为安全检查。
 ---
-# ⚙️ 四、NDP 报文字段结构
+# 四、NDP 报文字段结构
 
 所有报文的头部都是 ICMPv6 标准格式：
 ```
@@ -224,7 +227,8 @@ Redirect（Type 137）由路由器发给主机，告诉主机“对于某个目�
 | **Reachable Time**  | 32 bit | 一般为 0（未指定）  | 用于 NUD 参考时间        |
 | **Retrans Timer**   | 32 bit | 一般为 0（未指定）  | 用于 NS 重传间隔参考       |
 | **Options**         | 可变     | 含多个可选字段（见下） | 通告网络配置             |
-#### RA 常见 Options（选项字段）
+
+### RA 常见 Options（选项字段）
 | Option 类型 | 名称                               | 功能              |
 | --------- | -------------------------------- | --------------- |
 | 1         | **Source Link-Layer Address**    | 路由器 MAC 地址      |
@@ -232,7 +236,7 @@ Redirect（Type 137）由路由器发给主机，告诉主机“对于某个目�
 | 5         | **MTU Option**                   | 建议的链路 MTU       |
 | 25        | **Recursive DNS Server (RDNSS)** | 通告 DNS 服务器      |
 | 31        | **DNS Search List (DNSSL)**      | 通告域名搜索后缀        |
-##### Prefix Information Option（最关键）
+#### Prefix Information Option（最关键）
 ```
 +-------------------------------------------------------------+
 | Type (3) | Length | Prefix Length | L | A | Reserved |
@@ -243,21 +247,23 @@ Redirect（Type 137）由路由器发给主机，告诉主机“对于某个目�
 +-------------------------------------------------------------+
 ```
 
-|字段|含义|
-|---|---|
-|**Prefix Length**|前缀长度（通常为 64）|
-|**L 标志（On-link Flag）**|表示此前缀内的地址是直接可达的|
-|**A 标志（Autonomous Flag）**|表示可用该前缀自动生成 IPv6 地址（SLAAC）|
-|**Valid / Preferred Lifetime**|地址有效期与优先期|
-|**Prefix**|前缀值（例如 2001:db8:1::）|
-#### 标志位总结：
+| 字段                             | 含义                         |
+| ------------------------------ | -------------------------- |
+| **Prefix Length**              | 前缀长度（通常为 64）               |
+| **L 标志（On-link Flag）**         | 表示此前缀内的地址是直接可达的            |
+| **A 标志（Autonomous Flag）**      | 表示可用该前缀自动生成 IPv6 地址（SLAAC） |
+| **Valid / Preferred Lifetime** | 地址有效期与优先期                  |
+| **Prefix**                     | 前缀值（例如 2001:db8:1::）       |
+### 标志位总结：
 | 标志位               | 含义              | 主要控制什么                |
 | ----------------- | --------------- | --------------------- |
 | **M（Managed）**    | 地址由 DHCPv6 管理   | 是否启用 DHCPv6 地址分配      |
 | **O（Other）**      | 其他参数由 DHCPv6 管理 | 是否从 DHCPv6 获取 DNS 等信息 |
 | **A（Autonomous）** | 前缀可用于 SLAAC     | 是否可自动生成地址             |
 | **L（On-Link）**    | 前缀在链路上有效        | 是否可直接通信               |
-##### Flags 位如何影响主机行为（SLAAC / DHCPv6）
+M/O flag的位置分别在第7和第6位上，也就是最高位和次高位，剩下的0-5的保留位设为0。
+
+### Flags 位如何影响主机行为（SLAAC / DHCPv6）
 
 当主机收到 RA 报文时：
 1. 查看 **M / O 标志位**
@@ -275,8 +281,51 @@ PIO 里有 `A`（Autonomous）和 `L`（On-Link）标志：
  例如：
 - 若 `M=1`，则即使 `A=1`，主机一般也以 DHCPv6 地址为主。
 - 若 `M=0 且 A=1`，主机会使用 SLAAC。
+
+### 关于RA m/o Flags字段的6bits保留字段
+
+[RFC 5175: IPv6 Router Advertisement Flags Option](https://www.rfc-editor.org/rfc/rfc5175.html)
+RFC 5175介绍了 “Router Advertisement Flags Option (RAFO)” 的机制，允许定义额外的 flags。当使用 RAFO 时，这些保留位理论上可以携带扩展含义。
+```
+ 0 1 2 3 4 5 6 7
++-+-+-+-+-+-+-+-+
+|M|O|H|Prf|P|R|R|
++-+-+-+-+-+-+-+-+
+```
+   
+- M - Managed Address Configuration Flag
+- O - Other Configuration Flag
+- H - Mobile IPv6 Home Agent Flag 
+- Prf - Router Selection Preferences 
+- P - Neighbor Discovery Proxy Flag 
+- R - Reserved
+
+#### PRF字段
+
+**PRF（Default Router Preference）** 是 IPv6 **RA（Router Advertisement）报文**中的一个字段，用来指示**该路由器的优先级**。它帮助主机在有多个路由器可选时，决定**默认网关选哪个**。
+
+在 **RA 报文的 “Prefix Information Option (PIO)”** 或者 **Route Information Option (RIO)** 里，会携带 `PRF` 字段。  
+但最常见的是在 **Router Advertisement 的 Flags + Reserved 位** 中定义。
+
+|PRF 位值（二进制）|含义|优先级说明|
+|---|---|---|
+|`00`|Medium（默认）|默认优先级|
+|`01`|High|高优先级路由|
+|`10`|**Reserved**|保留，不应使用|
+|`11`|Low|低优先级路由|
+
+假设一个主机收到两个路由器的 RA 报文：
+
+|路由器|PRF|Router Lifetime|主机选择|
+|---|---|---|---|
+|Router A|High|1800 秒|✅ 选为默认网关|
+|Router B|Medium|1800 秒|❌ 备用|
+|Router C|Low|1800 秒|❌ 只在A/B都不可达时才用|
+
+所以 **PRF 是决定默认路由优先级的关键字段**，比 Router Lifetime 更优先考虑。
+
 ---
-#  🧮 五、报文流程
+#  五、报文流程
 
 ## NDP地址解析
 
@@ -336,7 +385,7 @@ IPv6 会定期验证邻居是否可达：
 ---
 #网络/IPv6/Unicast 
 #网络/IPv6/Multicast 
-# 🌍 六、NDP 使用的地址
+# 六、NDP 使用的地址
 
 ## NDP 报文常见的三种 IPv6 地址类型
 | 地址类型                 | 举例                                | 用途说明                                   |
@@ -361,3 +410,6 @@ IPv6 会定期验证邻居是否可达：
 ### ⚙️ **Solicited-Node 地址生成规则：**  
 >取 IPv6 地址的最后 24 位（低 3 字节）拼在 `ff02::1:ff` 后面。  
 例如：`fe80::abcd:1234:5678` → `ff02::1:ff34:5678`
+
+
+

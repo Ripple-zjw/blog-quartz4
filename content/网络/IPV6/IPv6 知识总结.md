@@ -52,7 +52,7 @@
 | **[6rd](6rd-tunnel) (RFC 5969)** | IPv6 over IPv4 IPv4 网络上快速部署 IPv6 的过渡机制 |
 | **ISATAP（RFC 5214）**             | IPv6 over IPv4 内网自动隧道。                 |
 | **Teredo（RFC 4380）**             | IPv6 over UDP over IPv4 穿透 NAT（已淘汰）。   |
-| **DS-Lite（RFC 6333）**            | IPv6-only 网络访问 IPv4。                   |
+| **[[DS-Lite Tunnel]]（RFC 6333）** | IPv6-only 网络访问 IPv4。                   |
 | **NAT64/NAT46（RFC 6146）**        | IPv6/IPv4 地址转换。                        |
 | **464XLAT（RFC 6877）**            | Android 移动网络常用的 NAT64/CLAT 模式。         |
 | **MAP-E / MAP-T（RFC 7597/7599）** | IPv4 over IPv6 映射机制（ISP 常用）。           |

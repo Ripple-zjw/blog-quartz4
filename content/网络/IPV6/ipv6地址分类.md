@@ -94,7 +94,7 @@ IID = F(Prefix, Network_Interface, DAD_Counter, Secret_Key)
 
 ---
 
-# 🌐 三、组播地址（Multicast）
+# 🌐 三、组播/多播地址（Multicast）
 
 #网络/IPv6/Multicast 
 
