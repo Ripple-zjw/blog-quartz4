@@ -1,3 +1,7 @@
+---
+date: 2025-10-16T16:25:43
+---
+
 
 # 🧩 一、IPv6 地址的三大类型（按功能划分）
 #网络/IPv6/Unicast #网络/IPv6/Multicast #网络/IPv6/Anycast 

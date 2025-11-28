@@ -1,3 +1,7 @@
+---
+date: 2025-10-16T16:25:43
+---
+
 #网络/IPv6/ICMPv6协议 #网络/IPv6/NDP协议 
 
 NDP（**Neighbor Discovery Protocol**，邻居发现协议）是 IPv6 网络中最核心的控制协议之一。  
