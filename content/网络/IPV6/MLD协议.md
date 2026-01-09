@@ -1,9 +1,9 @@
 ---
 date: 2025-10-16T16:25:43
+tags:
+  - 网络/IPv6
+  - 网络/ICMPv6协议
 ---
-
-#网络/IPv6/MLD协议 #网络/IPv6/ICMPv6协议 
-
 MLD（**Multicast Listener Discovery，多播监听发现协议**）是 IPv6 版本的 IGMP。
 # 🧭 一、MLD 是什么？
 - **全称**：Multicast Listener Discovery

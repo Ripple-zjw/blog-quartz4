@@ -1,9 +1,9 @@
 ---
 date: 2025-10-16T16:25:43
+tags:
+  - 网络/IPv6
+  - 网络/ICMPv6协议
 ---
-
-#网络/IPv6/IPv6协议 #网络/IPv6/ICMPv6协议 #网络/IPv6/NDP协议 
-
 # ipv6协议
 
 ## 🧩 一、核心协议层（IPv6 主体）
@@ -53,7 +53,7 @@ date: 2025-10-16T16:25:43
 | -------------------------------- | -------------------------------------- |
 | **Dual Stack**                   | 主机同时启用 IPv4 和 IPv6。                    |
 | **6to4（RFC 3056）**               | IPv6 over IPv4 自动隧道（已淘汰）。              |
-| **[6rd](6rd-tunnel) (RFC 5969)** | IPv6 over IPv4 IPv4 网络上快速部署 IPv6 的过渡机制 |
+| **[6rd](6rd-tunnel.md) (RFC 5969)** | IPv6 over IPv4 IPv4 网络上快速部署 IPv6 的过渡机制 |
 | **ISATAP（RFC 5214）**             | IPv6 over IPv4 内网自动隧道。                 |
 | **Teredo（RFC 4380）**             | IPv6 over UDP over IPv4 穿透 NAT（已淘汰）。   |
 | **[[DS-Lite Tunnel]]（RFC 6333）** | IPv6-only 网络访问 IPv4。                   |

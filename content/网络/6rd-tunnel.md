@@ -1,9 +1,8 @@
 ---
 date: 2025-10-16T16:25:43
+tags:
+  - 网络/6over4tun
 ---
-
-#网络/6rd-tunnel 
-
 # 一、概念简介
 
 **6rd（IPv6 Rapid Deployment）** 是一种在 **IPv4 网络上快速部署 IPv6** 的过渡机制。  

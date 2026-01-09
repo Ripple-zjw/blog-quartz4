@@ -1,9 +1,9 @@
 ---
 date: 2025-10-16T16:25:43
+tags:
+  - 网络/IPv6
+  - 网络/ICMPv6协议
 ---
-
-#网络/IPv6/ICMPv6协议 #网络/IPv6/NDP协议 
-
 NDP（**Neighbor Discovery Protocol**，邻居发现协议）是 IPv6 网络中最核心的控制协议之一。  
 它负责的功能相当于 IPv4 中 **ARP + ICMP Router Discovery + ICMP Redirect + 部分 DHCP 功能** 的综合体。
 
@@ -387,8 +387,6 @@ IPv6 会定期验证邻居是否可达：
 这样即便链路中 MAC 地址或路由变化，IPv6 也能自动修正。
 
 ---
-#网络/IPv6/Unicast 
-#网络/IPv6/Multicast 
 # 六、NDP 使用的地址
 
 ## NDP 报文常见的三种 IPv6 地址类型

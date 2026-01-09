@@ -1,9 +1,9 @@
 ---
 date: 2025-10-16T16:25:43
+tags:
+  - 网络/DHCPv6协议
+  - 网络/IPv6
 ---
-
-#网络/IPv6/DHCPv6协议 
-
 # 🧩 一、什么是 DHCPv6-PD
 
 **DHCPv6 Prefix Delegation（PD）** 是 DHCPv6 的一种扩展机制，用来给下游路由器分配一个**可用的前缀（subnet prefix）**，而不是单个 IPv6 地址。
