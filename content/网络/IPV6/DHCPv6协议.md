@@ -6,7 +6,7 @@ tags:
 ---
 
 
-# 🧭 一、DHCPv6 是什么？
+# 一、DHCPv6 是什么？
 
 **全称**：Dynamic Host Configuration Protocol for IPv6  
 **标准**：RFC 8415（取代旧版 RFC 3315）  
@@ -18,7 +18,7 @@ tags:
 
 ---
 
-# 🧩 二、为什么还需要 DHCPv6？
+# 二、为什么还需要 DHCPv6？
 
 IPv6 有 **自动配置机制（SLAAC）**，那为什么还要 DHCPv6 呢？
 因为 SLAAC 只能提供：
@@ -29,17 +29,17 @@ IPv6 有 **自动配置机制（SLAAC）**，那为什么还要 DHCPv6 呢？
 - 域名搜索后缀；
 - NTP、SIP 等服务信息；
 - 地址集中管理与审计。
-👉 这些是 **DHCPv6** 存在的意义。
+这些是 **DHCPv6** 存在的意义。
 
 ---
-# ⚙️ 三、DHCPv6 的两种工作模式
+# 三、DHCPv6 的两种工作模式
 
 |模式|功能|特点|是否分配地址|
 |---|---|---|---|
 |**Stateful（有状态）**|类似 IPv4 DHCP|由服务器集中分配 IPv6 地址|✅ 是|
 |**Stateless（无状态）**|仅提供其他配置信息|地址由 SLAAC 自动生成|❌ 否|
 
-📘 这两种模式的选择由 **RA（Router Advertisement）中的 M/O 标志位** 控制：
+这两种模式的选择由 **RA（Router Advertisement）中的 M/O 标志位** 控制：
 
 |标志|含义|对应行为|
 |---|---|---|
@@ -47,7 +47,7 @@ IPv6 有 **自动配置机制（SLAAC）**，那为什么还要 DHCPv6 呢？
 |**O=1**|Other Configuration|启用 DHCPv6（Stateless）提供额外参数|
 |**M=0, O=0**|完全靠 SLAAC|不使用 DHCPv6|
 
-✅ 举例：
+举例：
  - 家用网络通常是 SLAAC + Stateless DHCPv6；
  - 企业网络常用 Stateful DHCPv6 进行集中管理。
 ## 如果客户端收到M标志位不同的两个ra报文怎么办
@@ -64,7 +64,7 @@ IPv6 有 **自动配置机制（SLAAC）**，那为什么还要 DHCPv6 呢？
 	- 如果同时存在 M=1 RA，则客户端只做 Stateful DHCPv6 分配，不再单独使用 O=1 的 Stateless 请求获取地址，但仍可获取额外参数。
 
 ---
-# 📦 四、DHCPv6 报文格式
+# 四、DHCPv6 报文格式
 
 DHCPv6 使用 **UDP 协议**：
 
@@ -90,7 +90,7 @@ DHCPv6 使用 **UDP 协议**：
 | **options**        | 携带选项内容（IA、DNS、Server ID 等）   |
 
 ---
-# 🧮 五、常见 DHCPv6 报文类型
+# 五、常见 DHCPv6 报文类型
 
 | 报文名称                        | 类型码     | 方向                | 说明               |
 | --------------------------- | ------- | ----------------- | ---------------- |
@@ -129,18 +129,18 @@ Client                             Server
 | 4   | REPLY     | ❌                | DHCPv6 服务器地址      | 客户端地址                              | 547 → 546 | 服务器确认分配地址及参数，包含租期信息      |
 
 ---
-# 📡 七、无状态模式（Stateless DHCPv6）
+# 七、无状态模式（Stateless DHCPv6）
 
 **目标**：客户端通过 SLAAC 自动生成 IPv6 地址，DHCPv6 仅提供其他参数（DNS、NTP、搜索域等）
 
-## 1️⃣ 流程概览
+## 流程概览
 ```
 Client                     Server
    |-- INFORMATION-REQUEST -->|
    |<-- REPLY ----------------|
 ```
 
-## 2️⃣ 报文详细说明
+## 报文详细说明
 
 | 步骤  | 报文类型                | Client → Server？ | Source IP                    | Dest IP                            | UDP 端口    | 作用                     |
 | --- | ------------------- | ---------------- | ---------------------------- | ---------------------------------- | --------- | ---------------------- |
@@ -148,7 +148,7 @@ Client                     Server
 | 2   | REPLY               | ❌                | DHCPv6 服务器地址                 | 客户端地址                              | 547 → 546 | 服务器返回配置信息（不分配 IPv6 地址） |
 
 ---
-# 🧠 八、DHCPv6 Option
+# 八、DHCPv6 Option
 
 ## 报文结构
 
@@ -205,7 +205,7 @@ RFC 8415 定义的所有 DHCPv6 Option 都有统一的**TLV 格式**：
 |T2|4|重新绑定时间|
 |IA_NA-options|可变|这里开始是一系列嵌套的 **子 Option**|
 
-➡️ 注意这里最后一部分是“IA_NA-options”，它自己又是一组 TLV 格式的子 Option。  
+注意这里最后一部分是“IA_NA-options”，它自己又是一组 TLV 格式的子 Option。  
 常见的子 Option 有：
 - **Option 5**（IA Address）
 - **Option 13**（Status Code）
@@ -255,7 +255,7 @@ RFC 8415 定义的所有 DHCPv6 Option 都有统一的**TLV 格式**：
 | **25xx**（范围） | **RDNSS / DNSSL**       | Router Advertisement 选项，对应 DHCPv6 的 DNS 扩展 | RFC 6106（通常不通过 DHCPv6 实现） |
 
 ---
-# 🧩 九、DHCPv6 与 SLAAC/NDP 的关系
+# 九、DHCPv6 与 SLAAC/NDP 的关系
 
 | 功能       | SLAAC         | DHCPv6     |
 | -------- | ------------- | ---------- |
