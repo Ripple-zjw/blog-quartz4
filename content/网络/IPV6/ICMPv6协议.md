@@ -8,7 +8,7 @@ tags:
 
 ---
 
-# 🧩 一、ICMPv6 的定位
+# 一、ICMPv6 的定位
 
 > ICMPv6（Internet Control Message Protocol for IPv6）  
 > 定义于 **RFC 4443**
@@ -19,11 +19,11 @@ ICMPv6 负责：
 - 发送诊断消息（如 ping）
 - 承载其他控制协议（比如 NDP、MLD、RA、RS）
 
-> ✅ IPv6 运行中几乎所有“控制类”操作，都通过 ICMPv6 完成。
+>  IPv6 运行中几乎所有“控制类”操作，都通过 ICMPv6 完成。
 
 ---
 
-# 🧱 二、ICMPv6 报文结构
+# 二、ICMPv6 报文结构
 
 基本格式：
 
@@ -42,9 +42,9 @@ ICMPv6 负责：
 
 ---
 
-# ⚠️ 三、ICMPv6 的两大类消息
+# 三、ICMPv6 的两大类消息
 
-## 1️⃣ 错误消息（Type < 128）
+## 错误消息（Type < 128）
 
 | Type  | Code | 含义                              |
 | ----- | ---- | ------------------------------- |
@@ -58,9 +58,9 @@ ICMPv6 负责：
 	- 因为 IPv6 不支持中间节点分片，这条消息用于告知源主机降低包大小。
 - “Parameter Problem” 通常是 IPv6 头或扩展头出错时触发。
 
-### 🧱 Type 1：Destination Unreachable
+### Type 1：Destination Unreachable
 
-> 📜 RFC 4443 §3.1  
+> RFC 4443 §3.1  
 > 当路由器或主机无法递交数据包时发送。
 
 #### 报文结构
@@ -86,9 +86,9 @@ Code = 不同的不可达原因
 | **4** | Port unreachable                                           | 目标端口无响应（常见于 UDP）               |
 | **5** | Source address failed ingress/egress policy                | 源地址策略被拒                        |
 | **6** | Reject route to destination                                | 路由被标记为拒绝                       |
-### 📦 Type 2：Packet Too Big
+### Type 2：Packet Too Big
 
-> 📜 RFC 4443 §3.2  
+> RFC 4443 §3.2  
 > IPv6 不允许中间节点分片，因此必须通知源主机减小包大小。
 
 #### 报文结构
@@ -110,9 +110,9 @@ Code = 0
 > 源主机发送 1500 字节包，下一跳 MTU 1280 →  
 > 路由器返回 Type 2，MTU=1280 → 源主机改发 1280 字节包。
 
-### ⏳ Type 3：Time Exceeded
+### Type 3：Time Exceeded
 
-> 📜 RFC 4443 §3.3  
+> RFC 4443 §3.3  
 > 当 IPv6 数据包的 Hop Limit（跳数）耗尽时发送。
 
 #### 报文结构
@@ -134,9 +134,9 @@ Code = 0 or 1
 | **1** | Fragment reassembly time exceeded | 分片重组超时（源节点负责分片）      |
 #### 典型用途
 - 被 **traceroute6** 工具使用：逐跳减少 Hop Limit，收到 Type 3 Code 0 报文即可获知中间路由。
-### ⚙️ Type 4：Parameter Problem
+### Type 4：Parameter Problem
 
-> 📜 RFC 4443 §3.4  
+> RFC 4443 §3.4  
 > 表示 IPv6 首部或扩展头字段有错误，无法处理。
 
 #### 报文结构
@@ -159,7 +159,7 @@ Code = 指示哪类错误
 #### 举例：
 - IPv6 包中 Next Header = 255（不存在的协议号） → Code 1
 - Hop-by-Hop 选项头格式错误 → Code 2
-## 2️⃣ 信息类消息（Type ≥ 128）
+## 信息类消息（Type ≥ 128）
 
 | Type    | Code | 含义                                              |
 | ------- | ---- | ----------------------------------------------- |
@@ -174,11 +174,11 @@ Code = 指示哪类错误
 | **136** | 0    | 邻居通告（Neighbor Advertisement, NA）                |
 | **137** | 0    | 重定向（Redirect）                                   |
 | **143** | 0    | MLDv2 Listener Report（多播监听报告，主机加入离开或过滤）         |
-🚀 从这里可以看出：
+从这里可以看出：
 - NDP（RS/RA/NS/NA/Redirect）其实都是 ICMPv6 的一部分；
 - MLD（多播监听）也在 ICMPv6 范围内。
 
-# 🧭 四、ICMPv6 与 IPv4 对比
+# 四、ICMPv6 与 IPv4 对比
 
 | 功能     | IPv4 协议                   | IPv6 协议               |
 | ------ | ------------------------- | --------------------- |
@@ -188,7 +188,7 @@ Code = 指示哪类错误
 | 多播管理   | IGMP                      | MLD（基于 ICMPv6）        |
 | MTU 探测 | ICMP Fragmentation Needed | ICMPv6 Packet Too Big |
 
-# 🧠 五、ICMPv6 的作用总结
+# 五、ICMPv6 的作用总结
 
 | 功能类别          | 示例消息                         | 说明           |
 | ------------- | ---------------------------- | ------------ |
@@ -198,7 +198,7 @@ Code = 指示哪类错误
 | **路径 MTU 发现** | Packet Too Big               | 通知源主机调整包大小   |
 | **组播管理**      | MLD 报文                       | 控制主机加入或离开组播组 |
 
-# 🧩 六、一个例子：ping6 流程
+# 六、一个例子：ping6 流程
 
 当你执行
 ```

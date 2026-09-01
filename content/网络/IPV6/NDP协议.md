@@ -19,7 +19,7 @@ NDP 是基于 **ICMPv6** 的一组消息协议，用于：
 - 邻居可达性检测（NUD）
 - 重定向（Redirect）
 
-📘 标准定义：  
+标准定义：  
 [RFC 4861](https://www.rfc-editor.org/rfc/rfc4861.html)（Neighbor Discovery for IP version 6）
 
 ---
@@ -320,11 +320,11 @@ RFC 5175介绍了 “Router Advertisement Flags Option (RAFO)” 的机制，允
 
 假设一个主机收到两个路由器的 RA 报文：
 
-|路由器|PRF|Router Lifetime|主机选择|
-|---|---|---|---|
-|Router A|High|1800 秒|✅ 选为默认网关|
-|Router B|Medium|1800 秒|❌ 备用|
-|Router C|Low|1800 秒|❌ 只在A/B都不可达时才用|
+| 路由器      | PRF    | Router Lifetime | 主机选择         |
+| -------- | ------ | --------------- | ------------ |
+| Router A | High   | 1800 秒          | 选为默认网关       |
+| Router B | Medium | 1800 秒          | 备用           |
+| Router C | Low    | 1800 秒          | 只在A/B都不可达时才用 |
 
 所以 **PRF 是决定默认路由优先级的关键字段**，比 Router Lifetime 更优先考虑。
 
@@ -335,7 +335,7 @@ RFC 5175介绍了 “Router Advertisement Flags Option (RAFO)” 的机制，允
 
 以主机 A 要访问主机 B 为例：
 
-1️⃣ A 发送 NS 请求：
+A 发送 NS 请求：
 
 ```
 源 IPv6：A 的地址  
@@ -344,7 +344,7 @@ Target Address：B 的 IPv6
 Option：Source Link-Layer Address（A 的 MAC）
 ```
 
-2️⃣ B 收到 NS 后，发送 NA 响应：
+B 收到 NS 后，发送 NA 响应：
 
 ```
 源 IPv6：B 的地址  
@@ -354,7 +354,7 @@ Target Address：B 的 IPv6
 Option：Target Link-Layer Address（B 的 MAC）
 ```
 
-3️⃣ A 收到后更新邻居缓存表：
+A 收到后更新邻居缓存表：
 
 ```
 IPv6 → MAC 映射建立完成
@@ -367,15 +367,15 @@ IPv6 → MAC 映射建立完成
 
 在 IPv6 自动配置中，每个新地址都必须先经过 DAD 检查，防止冲突。
 
- 1️⃣ 主机发送 NS：
+主机发送 NS：
 ```
 源地址：::（未配置）  
 目的地址：自己地址对应的 solicited-node multicast  
 Target Address：自己准备使用的 IPv6 地址  
 不带源 MAC 地址
 ```
-2️⃣ 如果网络中有人回应 NA，则说明地址已被占用。  
-3️⃣ 若无响应，则认为安全，可以正式使用该 IPv6 地址。
+如果网络中有人回应 NA，则说明地址已被占用。  
+若无响应，则认为安全，可以正式使用该 IPv6 地址。
 
 ---
 ## NUD（Neighbor Unreachability Detection）
@@ -409,7 +409,7 @@ IPv6 会定期验证邻居是否可达：
 | **ff02::1**           | 所有节点 (All Nodes)        | 链路内所有 IPv6 节点（主机+路由器）                                               |
 | **ff02::2**           | 所有路由器 (All Routers)     | 链路内所有路由器                                                            |
 | **ff02::1:ffXX:XXXX** | **Solicited-Node 多播地址** | 每个 IPv6 单播/任播地址自动对应一个 solicited-node 多播组，用于 NS/NA 定向通信（类似 ARP 的广播）。 |
-### ⚙️ **Solicited-Node 地址生成规则：**  
+### **Solicited-Node 地址生成规则：**  
 >取 IPv6 地址的最后 24 位（低 3 字节）拼在 `ff02::1:ff` 后面。  
 例如：`fe80::abcd:1234:5678` → `ff02::1:ff34:5678`
 

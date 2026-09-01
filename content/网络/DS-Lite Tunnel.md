@@ -9,7 +9,7 @@ tags:
 **DS-Lite（Dual-Stack Lite）** 是一种过渡技术，用于在 IPv6-only 的 ISP 网络中，为用户提供 IPv4 互联网访问能力。  
 它通过 **IPv4 over IPv6 隧道（Softwire）** 和 **集中 NAT（CGN/AFTR）** 来实现。
 
-> ✅ 目的：让运营商的核心网络只运行 IPv6，而用户仍能访问 IPv4 网站。
+> 目的：让运营商的核心网络只运行 IPv6，而用户仍能访问 IPv4 网站。
 
 DS-Lite 架构由两个关键组件组成：
 
